@@ -1,4 +1,13 @@
 {
   "headless": false,
-  "scrapeUrl": "https://www.myhome.ie/residential/dublin/house-for-sale?minbeds=3"
+  "scrapeUrl": "https://www.myhome.ie/residential/dublin/house-for-sale?minbeds=3",
+  "selectorTimeout": 5000,
+  "scraperTags": {
+    "housesForSale": "",
+    "price": "",
+    "address": "",
+    "beds": "",
+    "baths": "",
+    "surfaceArea": ""
+  }
 }

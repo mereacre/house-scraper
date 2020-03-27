@@ -8,7 +8,7 @@ module.exports = function(config, log) {
     const page = await browser.newPage();
     await page.goto(config.scrapeUrl);
 
-    return browser;
+    return {browser, page};
   }
 
   function stop(browser) {

@@ -6,6 +6,8 @@
     const defaultConfig = {
       "headless": false,
       "scrapeUrl": "",
+      "selectorTimeout": 5000,
+      "scraperTags": {},
     };
 
     const config = require(configFilename);
