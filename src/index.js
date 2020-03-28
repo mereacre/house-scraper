@@ -3,7 +3,12 @@ module.exports = function(config, log) {
   const debug = log("scraper:src");
   const webScraper = require("./web-scraper")(config, log);
 
-  async function crawl(page) {}
+  async function crawl(page) {
+    const count = await webScraper.getSaleCount(page);
+    debug(`Found ${count} properties.`);
+    const properties = await webScraper.getPageProperties(page);
+    debug(properties);
+  }
 
   async function save(data) {}
 

@@ -8,6 +8,7 @@
       "scrapeUrl": "",
       "selectorTimeout": 5000,
       "scraperTags": {},
+      "scraperRegex": {},
     };
 
     const config = require(configFilename);

@@ -3,11 +3,15 @@
   "scrapeUrl": "https://www.myhome.ie/residential/dublin/house-for-sale?minbeds=3",
   "selectorTimeout": 5000,
   "scraperTags": {
-    "housesForSale": "",
-    "price": "",
-    "address": "",
+    "housesForSale": "h1[class=\"SearchResults__Heading ng-star-inserted\"]",
+    "listingCard": "div[class=\"MobilePropertyListing__PropertyInfo\"]", 
+    "price": "div[class=\"MobilePropertyListing__Price\"]",
+    "address": "a[class=\"MobilePropertyListing__Link\"]",
     "beds": "",
     "baths": "",
     "surfaceArea": ""
+  },
+  "scraperRegex": {
+    "housesForSale": ["([\\d]+)\\sResults$", ""]
   }
 }
