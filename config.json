@@ -7,9 +7,8 @@
     "listingCard": "div[class=\"MobilePropertyListing__PropertyInfo\"]", 
     "price": "div[class=\"MobilePropertyListing__Price\"]",
     "address": "a[class=\"MobilePropertyListing__Link\"]",
-    "beds": "",
-    "baths": "",
-    "surfaceArea": ""
+    "info": "div[class=\"mt-2 MobilePropertyListing__PropertyDetails MhHelper__Flex--spaced ng-star-inserted\"]",
+    "infoTerm": "span[class=\"MobilePropertyListing__Detail ng-star-inserted\"]"
   },
   "scraperRegex": {
     "housesForSale": ["([\\d]+)\\sResults$", ""]

@@ -6,6 +6,7 @@ module.exports = function(config, log) {
   function findMatch(regex, searchString) {
     const result = searchString.match(regex);
 
+    if (!result) return [];
     return (result.length > 1) ? result.slice(1) : [];
   }
 
@@ -19,11 +20,11 @@ module.exports = function(config, log) {
 
   async function getPageString(page, tag) {
     const searchElement = await page.$(tag);
-    return page.evaluate((element) => element.innerHTML, searchElement);
+    return page.evaluate((element) => element.innerText, searchElement);
   }
 
   async function getHandleString(handle, tag) {
-    return handle.$eval(tag, (element) => element.innerHTML);
+    return handle.$eval(tag, (element) => element.innerText);
   }
 
   async function getHandleAttribute({handle, tag, property}) {
@@ -42,7 +43,31 @@ module.exports = function(config, log) {
   }
 
   function processId(idString) {
-    return "";
+    const terms = idString.split("/");
+    const id = terms[terms.length - 1];
+    return (/^[\d]+$/.test(id)) ? id : "";
+  }
+
+  function processBeds(bedString) {
+    return parseInt(findMatch(/([\d]+)\sbed/, bedString)[0]);
+  }
+
+  function processBaths(bathString) {
+    return parseInt(findMatch(/([\d]+)\sbath/, bathString)[0]);
+  }
+
+  function processArea(areaString) {
+    return Number(findMatch(/([\d]+\.[\d]+)|([\d]+).*m\\n2/, areaString)[0]);
+  }
+
+  async function getPropertyInfoTerms({handle, tag, tagTerm}) {
+    const info = {};
+    const terms = await handle.$(tag);
+    const termsStrings = await terms.$$eval(tagTerm, (nodes) => nodes.map((n) => n.innerText));
+    info.beds = processBeds(termsStrings[0] || "") || 0;
+    info.baths = processBaths(termsStrings[1] || "") || 0;
+    info.area = processArea(termsStrings[2] || "") || 0;
+    return info;
   }
 
   async function getPageProperties(page) {
@@ -59,7 +84,18 @@ module.exports = function(config, log) {
 
       property.href = await getHandleAttribute({handle, tag: config.scraperTags.address, property: "href"});
       property.id = processId(property.href);
-      properties.push(property);
+
+      if (!property.id) {
+        throw Error(`Unknown property id/href=${property.href}`);
+      }
+
+      const info = await getPropertyInfoTerms({
+        handle,
+        tag: config.scraperTags.info,
+        tagTerm: config.scraperTags.infoTerm,
+      });
+
+      properties.push({...property, ...info});
     }
 
     return properties;
