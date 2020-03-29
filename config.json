@@ -8,9 +8,12 @@
     "price": "div[class=\"MobilePropertyListing__Price\"]",
     "address": "a[class=\"MobilePropertyListing__Link\"]",
     "info": "div[class=\"mt-2 MobilePropertyListing__PropertyDetails MhHelper__Flex--spaced ng-star-inserted\"]",
-    "infoTerm": "span[class=\"MobilePropertyListing__Detail ng-star-inserted\"]"
+    "infoTerm": "span[class=\"MobilePropertyListing__Detail ng-star-inserted\"]",
+    "mobilePagination": "div[class=\"MobilePagination MhHelper__Flex--centered\"]",
+    "totalPages": "span[class=\"MhHelper__Flex--centered\"]"
   },
   "scraperRegex": {
-    "housesForSale": ["([\\d]+)\\sResults$", ""]
+    "housesForSale": ["([\\d]+)\\sResults$|.+Page 11", ""],
+    "currentPage": ["[\\d]+\\sResults.+Page\\s([\\d]+)", ""]
   }
 }

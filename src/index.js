@@ -4,10 +4,12 @@ module.exports = function(config, log) {
   const webScraper = require("./web-scraper")(config, log);
 
   async function crawl(page) {
-    const count = await webScraper.getSaleCount(page);
-    debug(`Found ${count} properties.`);
+    const {count, pageNumber} = await webScraper.getPageInfo(page);
+    const pageCount = await webScraper.getPageCount(page);
+    debug(`Found ${count} properties and total ${pageCount} pages.`);
     const properties = await webScraper.getPageProperties(page);
-    debug(properties);
+    await webScraper.clickNextPage(page);
+    // debug(properties);
   }
 
   async function save(data) {}

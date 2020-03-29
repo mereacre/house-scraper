@@ -10,12 +10,10 @@ module.exports = function(config, log) {
     return (result.length > 1) ? result.slice(1) : [];
   }
 
-  function processCount(regexArray, htmlString) {
+  function processPageInfo(regexArray, htmlString) {
     const regex = new RegExp(regexArray[0], regexArray[1]);
-    const countString = findMatch(regex, htmlString)[0] || "";
-    if (!countString) throw Error("Unknown count tag!");
-
-    return parseInt(countString);
+    const infoString = findMatch(regex, htmlString)[0] || "";
+    return parseInt(infoString);
   }
 
   async function getPageString(page, tag) {
@@ -31,10 +29,27 @@ module.exports = function(config, log) {
     return handle.$eval(tag, (element, property) => element[property], property);
   }
 
-  async function getSaleCount(page) {
+  async function getPageInfo(page) {
     await page.waitForSelector(config.scraperTags.housesForSale, {timeout: config.selectorTimeout});
-    const htmlString = await getPageString(page, config.scraperTags.housesForSale);
-    return processCount(config.scraperRegex.housesForSale, htmlString);
+    const titleString = await getPageString(page, config.scraperTags.housesForSale);
+    const count = processPageInfo(config.scraperRegex.housesForSale, titleString);
+
+    if (isNaN(count)) {
+      throw Error(`Unknown search count=${titleString}`);
+    }
+
+    const pageNumber = processPageInfo(config.scraperRegex.currentPage, titleString) || 0;
+    return {
+      count,
+      pageNumber,
+    };
+  }
+
+  async function getPageCount(page) {
+    const handle = await page.$(config.scraperTags.mobilePagination);
+    const termsStrings = await handle.$$eval(config.scraperTags.totalPages, (nodes) => nodes.map((n) => n.innerText));
+    const pageString = findMatch(/Page of ([\d]+)/, termsStrings.join(" "))[0] || "";
+    return parseInt(pageString) || 0;
   }
 
   function processPrice(priceString) {
@@ -101,6 +116,10 @@ module.exports = function(config, log) {
     return properties;
   }
 
+  async function clickNextPage(page) {
+    return {};
+  }
+
   async function start() {
     const browser = await puppeteer.launch({headless: config.headless});
     const page = await browser.newPage();
@@ -116,7 +135,9 @@ module.exports = function(config, log) {
   return {
     start,
     stop,
-    getSaleCount,
+    getPageInfo,
     getPageProperties,
+    clickNextPage,
+    getPageCount,
   };
 };
