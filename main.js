@@ -7,6 +7,7 @@
       "headless": false,
       "scrapeUrl": "",
       "selectorTimeout": 5000,
+      "pageDelayInterval": [1000, 5000],
       "scraperTags": {},
       "scraperRegex": {},
     };
@@ -19,7 +20,7 @@
   const scraper = require("./src")(config, log);
   debug("Starting scraper...");
   try {
-    scraper.start();
+    await scraper.start();
   } catch (error) {
     debug(error);
     process.exit(-1);

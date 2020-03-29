@@ -29,8 +29,11 @@ module.exports = function(config, log) {
     return handle.$eval(tag, (element, property) => element[property], property);
   }
 
-  async function getPageInfo(page) {
+  async function waitPageLoad(page) {
     await page.waitForSelector(config.scraperTags.housesForSale, {timeout: config.selectorTimeout});
+  }
+
+  async function getTotalProperties(page) {
     const titleString = await getPageString(page, config.scraperTags.housesForSale);
     const count = processPageInfo(config.scraperRegex.housesForSale, titleString);
 
@@ -38,11 +41,13 @@ module.exports = function(config, log) {
       throw Error(`Unknown search count=${titleString}`);
     }
 
-    const pageNumber = processPageInfo(config.scraperRegex.currentPage, titleString) || 0;
-    return {
-      count,
-      pageNumber,
-    };
+    return count;
+  }
+
+  async function getCurrentPageNumber(page) {
+    const titleString = await getPageString(page, config.scraperTags.housesForSale);
+    const pageNumber = processPageInfo(config.scraperRegex.currentPage, titleString);
+    return (isNaN(pageNumber)) ? 1 : pageNumber;
   }
 
   async function getPageCount(page) {
@@ -117,7 +122,7 @@ module.exports = function(config, log) {
   }
 
   async function clickNextPage(page) {
-    return {};
+    await page.click(config.scraperTags.nextButton);
   }
 
   async function start() {
@@ -135,9 +140,11 @@ module.exports = function(config, log) {
   return {
     start,
     stop,
-    getPageInfo,
     getPageProperties,
     clickNextPage,
     getPageCount,
+    getCurrentPageNumber,
+    getTotalProperties,
+    waitPageLoad,
   };
 };

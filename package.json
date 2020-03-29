@@ -33,6 +33,7 @@
     "jest": "^25.2.3"
   },
   "dependencies": {
+    "delay": "^4.3.0",
     "puppeteer": "^2.1.1"
   }
 }
