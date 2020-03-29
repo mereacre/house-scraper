@@ -5,6 +5,7 @@
   function loadConfig(configFilename) {
     const defaultConfig = {
       "headless": false,
+      "numPages": 0,
       "scrapeUrl": "",
       "selectorTimeout": 5000,
       "pageDelayInterval": [1000, 5000],
