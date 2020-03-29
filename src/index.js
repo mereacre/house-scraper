@@ -49,7 +49,7 @@ module.exports = function(config, log) {
     const {browser, page} = await webScraper.start();
     debug("Scraper started.");
 
-    const data = await crawl(page, 2);
+    const data = await crawl(page);
     await save(data);
 
     await webScraper.stop(browser);
