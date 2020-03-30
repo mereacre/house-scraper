@@ -37,19 +37,23 @@
   const config = loadConfig(process.argv[2] || "./cron.config.json");
 
   debug("Waiting to schedule a cron task...");
-  const countries = await getVpnCountries(config.nordvpnApi);
-
   cron.schedule(`${config.startMinute} ${config.startHour} * * *`, async() => {
     try {
+      const countries = await getVpnCountries(config.nordvpnApi);
       const randomWait = getRandomIntInclusive.apply(null, config.hourInterval);
       debug(`Start minute/hour and waiting for ${randomWait} hours`);
 
       await delay(randomWait * MS_IN_HOUR);
 
+      // Connectc to vpn
       const country = await runNordvpn(countries);
       debug(`Connected to ${country}`);
 
+      // Run the scraper
       await scraper.run(config.task);
+
+      // Disconnect vpn
+      await exec("nordvpn disconnect");
     } catch (error) {
       debug(error);
     }
