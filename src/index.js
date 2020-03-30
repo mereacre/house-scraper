@@ -4,12 +4,7 @@ module.exports = function(config, log) {
   const debug = log("scraper:src");
   const webScraper = require("./web-scraper")(config, log);
   const postgres = require("./postgres")(config, log);
-
-  function getRandomIntInclusive(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+  const {getRandomIntInclusive} = require("./utils");
 
   async function crawl(page, numPages = 0) {
     let propertyList = [];
@@ -26,13 +21,10 @@ module.exports = function(config, log) {
       const properties = await webScraper.getPageProperties(page);
       propertyList = propertyList.concat(properties);
 
-      debug(`Processing page ${currentPageNumber}`);
-
       if (currentPageNumber === pageCount) {
         break;
       } else {
         const delayMs = getRandomIntInclusive.apply(null, config.pageDelayInterval);
-        debug(`Dealying for ${delayMs} milliseconds`);
         await delay(delayMs);
         await webScraper.clickNextPage(page);
         await webScraper.waitPageLoad(page);

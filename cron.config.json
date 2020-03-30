@@ -1,4 +1,7 @@
 {
-  "startHour": 10,
-  "hourInterval": [1, 10]
+  "startMinute": 1,
+  "startHour": 19,
+  "hourInterval": [0, 0],
+  "task": "./config.json",
+  "nordvpnApi": "https://api.nordvpn.com/v1/servers/countries"
 }

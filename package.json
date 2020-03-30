@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "dev": "DEBUG=scraper:* node main.js",
-    "cron": "DEBUG=*:* node cron.js",
+    "cron": "DEBUG=scraper:* node cron.js",
     "lint": "eslint '**/*.js'",
     "test": "jest"
   },
@@ -34,6 +34,7 @@
     "jest": "^25.2.3"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "delay": "^4.3.0",
     "dotenv": "^8.2.0",
     "node-cron": "^2.0.3",

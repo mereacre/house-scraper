@@ -25,12 +25,7 @@ async function run(configFilename) {
 
   const scraper = require("./src")(config, log);
   debug("Starting scraper...");
-  try {
-    await scraper.start();
-  } catch (error) {
-    debug(error);
-    process.exit(-1);
-  }
+  await scraper.start();
 }
 
 module.exports = {
