@@ -33,8 +33,7 @@ module.exports = function(config, log) {
       await client.query("BEGIN");
       await savePriceData(client, priceList);
       await saveInfoData(client, infoList);
-      const result = await client.query("SELECT * FROM prices");
-      debug(result);
+      await client.query("SELECT * FROM prices");
       await client.query("COMMIT");
     } catch (error) {
       await client.query("ROLLBACK");
