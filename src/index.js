@@ -3,6 +3,7 @@ module.exports = function(config, log) {
   const delay = require("delay");
   const debug = log("scraper:src");
   const webScraper = require("./web-scraper")(config, log);
+  const postgres = require("./postgres")(config, log);
 
   function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
@@ -41,16 +42,12 @@ module.exports = function(config, log) {
     return {propertyList, totalProperties};
   }
 
-  async function save(data) {
-    console.log(data);
-  }
-
   async function start() {
     const {browser, page} = await webScraper.start();
     debug("Scraper started.");
 
-    const data = await crawl(page, config.numPages);
-    await save(data);
+    const {propertyList} = await crawl(page, config.numPages);
+    await postgres.save(propertyList);
 
     await webScraper.stop(browser);
     debug("Scraper stopped.");

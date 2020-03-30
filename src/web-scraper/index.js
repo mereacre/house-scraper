@@ -1,6 +1,5 @@
 module.exports = function(config, log) {
   "use strict";
-  const debug = log("scraper:web-scraper");
   const puppeteer = require("puppeteer");
 
   function findMatch(regex, searchString) {
