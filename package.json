@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "DEBUG=scraper:* node main.js",
     "cron": "DEBUG=scraper:* node cron.js",
+    "start": "DEBUG=scraper:* node cron.js",
     "lint": "eslint '**/*.js'",
     "test": "jest"
   },
