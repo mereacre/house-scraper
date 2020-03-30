@@ -1,6 +1,9 @@
 require("dotenv").config();
+const os = require("os");
+const path = require("path");
 const log = require("debug");
 const debug = log("scraper:scraper");
+const {mkdir} = require("./src/utils");
 
 function loadConfig(configFilename) {
   const defaultConfig = {
@@ -13,6 +16,8 @@ function loadConfig(configFilename) {
     "pageDelayInterval": [1000, 5000],
     "scraperTags": {},
     "scraperRegex": {},
+    "scraperFolder": ".house-scraper",
+    "db": {},
   };
 
   const config = require(configFilename);
@@ -22,6 +27,11 @@ function loadConfig(configFilename) {
 async function run(configFilename) {
   const config = loadConfig(configFilename);
   config.databaseUrl = process.env.DATABASE_URL;
+
+  // Create the scraper home directory
+  const homePath = os.homedir();
+  config.houseScraperHomePath = path.join(homePath, config.scraperFolder);
+  await mkdir(config.houseScraperHomePath);
 
   const scraper = require("./src")(config, log);
   debug("Starting scraper...");

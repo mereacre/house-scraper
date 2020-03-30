@@ -20,5 +20,33 @@
   "scraperRegex": {
     "housesForSale": ["([\\d]+)\\sResults$|.+Page 11", ""],
     "currentPage": ["[\\d]+\\sResults.+Page\\s([\\d]+)", ""]
+  },
+  "scraperFolder": ".house-scraper",
+  "db": {
+    "prices": {
+      "id": "prices",
+      "schema": {
+        "dataSchema": {
+          "id": {"__tdxType": ["string"]},
+          "timestamp": {"__tdxType": ["number"]},
+          "price": {"__tdxType": ["number"]}
+        },
+        "uniqueIndex": [{"asc": "id"}, {"asc": "timestamp"}]
+      }
+    },
+    "housemeta": {
+      "id": "housemeta",
+      "schema": {
+        "dataSchema": {
+          "id": {"__tdxType": ["string"]},
+          "href": {"__tdxType": ["string"]},
+          "address": {"__tdxType": ["string"]},
+          "beds": {"__tdxType": ["number"]},
+          "baths": {"__tdxType": ["number"]},
+          "area": {"__tdxType": ["number"]}
+        },
+        "uniqueIndex": [{"asc": "id"}]
+      }
+    }
   }
 }

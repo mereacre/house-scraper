@@ -3,7 +3,7 @@ module.exports = function(config, log) {
   const delay = require("delay");
   const debug = log("scraper:src");
   const webScraper = require("./web-scraper")(config, log);
-  const postgres = require("./postgres")(config, log);
+  const databaseUtils = require("./database-utils")(config, log);
   const {getRandomIntInclusive} = require("./utils");
 
   async function crawl(page, numPages = 0) {
@@ -35,16 +35,17 @@ module.exports = function(config, log) {
   }
 
   async function start() {
-    const {browser, page} = await webScraper.start();
-    debug("Scraper started.");
+    // const {browser, page} = await webScraper.start();
+    // debug("Scraper started.");
 
-    const {propertyList} = await crawl(page, config.numPages);
+    // const {propertyList} = await crawl(page, config.numPages);
 
     debug("Saving data to postgres.");
-    await postgres.save(propertyList);
+    // await postgres.save(propertyList);
+    await databaseUtils.save({});
 
-    await webScraper.stop(browser);
-    debug("Scraper stopped.");
+    // await webScraper.stop(browser);
+    // debug("Scraper stopped.");
   }
 
   return {
