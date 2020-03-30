@@ -39,6 +39,8 @@ module.exports = function(config, log) {
     debug("Scraper started.");
 
     const {propertyList} = await crawl(page, config.numPages);
+
+    debug("Saving data to postgres.");
     await postgres.save(propertyList);
 
     await webScraper.stop(browser);
