@@ -1,6 +1,6 @@
 {
   "headless": true,
-  "numPages": 1,
+  "numPages": 0,
   "scrapeUrl": "https://www.myhome.ie/residential/dublin/house-for-sale?minbeds=3",
   "selectorTimeout": 30000,
   "pageDelayInterval": [1000, 5000],

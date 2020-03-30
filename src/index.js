@@ -35,17 +35,16 @@ module.exports = function(config, log) {
   }
 
   async function start() {
-    // const {browser, page} = await webScraper.start();
-    // debug("Scraper started.");
+    const {browser, page} = await webScraper.start();
+    debug("Scraper started.");
 
-    // const {propertyList} = await crawl(page, config.numPages);
+    const {propertyList} = await crawl(page, config.numPages);
 
-    debug("Saving data to postgres.");
-    // await postgres.save(propertyList);
-    await databaseUtils.save({});
+    debug("Saving data to database-utils.");
+    await databaseUtils.save(propertyList);
 
-    // await webScraper.stop(browser);
-    // debug("Scraper stopped.");
+    await webScraper.stop(browser);
+    debug("Scraper stopped.");
   }
 
   return {

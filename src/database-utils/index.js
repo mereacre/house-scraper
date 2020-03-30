@@ -33,9 +33,9 @@ module.exports = function(config, log) {
     const pricesDb = await openDataset(pricesDbPath, config.db.prices);
     const housemetaDb = await openDataset(housemetaDbPath, config.db.housemeta);
     const countPrices = await sqliteUtils.addData(pricesDb, pricesList);
-    const countHomemeta = await sqliteUtils.addData(housemetaDbPath, homemetaList);
+    await sqliteUtils.updateData(housemetaDb, homemetaList, true);
 
-    debug(`Added ${countPrices} prices and updated ${countHomemeta} house meta rows`);
+    debug(`Added ${countPrices.count} prices.`);
 
     await sqliteUtils.closeDatabase(pricesDb);
     await sqliteUtils.closeDatabase(housemetaDb);
