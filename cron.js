@@ -8,6 +8,7 @@
   const axios = require("axios");
 
   const MS_IN_HOUR = 3600000;
+  const NUM_TRIES = 10;
 
   function loadConfig(configFilename) {
     const defaultConfig = {
@@ -28,10 +29,19 @@
   }
 
   async function runNordvpn(countries) {
-    const idx = getRandomIntInclusive(0, countries.length - 1);
-    const randomCountry = countries[idx] || "";
-    await exec(`nordvpn connect ${randomCountry}`);
-    return randomCountry;
+    let count = 0;
+    while (count < NUM_TRIES) {
+      try {
+        const idx = getRandomIntInclusive(0, countries.length - 1);
+        const randomCountry = countries[idx] || "";
+        await exec(`nordvpn connect ${randomCountry}`);
+        return randomCountry;
+      } catch (error) {
+        count++;
+      }
+    }
+
+    throw Error("nordvpn run count");
   }
 
   const config = loadConfig(process.argv[2] || "./cron.config.json");
@@ -45,7 +55,7 @@
 
       await delay(randomWait * MS_IN_HOUR);
 
-      // Connectc to vpn
+      // Connect to vpn
       const country = await runNordvpn(countries);
       debug(`Connected to ${country}`);
 
