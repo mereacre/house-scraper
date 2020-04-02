@@ -28,16 +28,18 @@
     return out.data.map((v) => (v.code));
   }
 
-  async function runNordvpn(countries) {
+  async function runNordvpn(countries, testRequest) {
     let count = 0;
     while (count < NUM_TRIES) {
       try {
         const idx = getRandomIntInclusive(0, countries.length - 1);
         const randomCountry = countries[idx] || "";
         await exec(`nordvpn connect ${randomCountry}`);
+        await axios.get(testRequest);
         return randomCountry;
       } catch (error) {
         count++;
+        debug(`Error getting vpn connection, trying ${count}`);
       }
     }
 
@@ -56,16 +58,16 @@
       await delay(randomWait * MS_IN_HOUR);
 
       // Connect to vpn
-      const country = await runNordvpn(countries);
+      const country = await runNordvpn(countries, config.testRequest);
       debug(`Connected to ${country}`);
 
       // Run the scraper
       await scraper.run(config.task);
-
-      // Disconnect vpn
-      await exec("nordvpn disconnect");
     } catch (error) {
       debug(error);
+    } finally {
+      // Disconnect vpn
+      await exec("nordvpn disconnect");
     }
   });
 }());

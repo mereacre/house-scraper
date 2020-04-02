@@ -3,5 +3,6 @@
   "startHour": 23,
   "hourInterval": [0, 0],
   "task": "./config.json",
-  "nordvpnApi": "https://api.nordvpn.com/v1/servers/countries"
+  "nordvpnApi": "https://api.nordvpn.com/v1/servers/countries",
+  "testRequest": "https://example.org/"
 }
