@@ -12,11 +12,16 @@ module.exports = function(config, log) {
 
   async function save(data) {
     const currentTime = Date.now();
-    const pricesList = data.map((value) => ({
-      id: value.id,
-      timestamp: currentTime,
-      price: value.price,
-    }));
+    const pricesMap = {};
+    data.forEach((value) => {
+      pricesMap[value.id] = {
+        id: value.id,
+        timestamp: currentTime,
+        price: value.price,
+      };
+    });
+
+    const pricesList = Object.keys(pricesMap).map((key) => (pricesMap[key]));
 
     const homemetaList = data.map((value) => ({
       id: value.id,
